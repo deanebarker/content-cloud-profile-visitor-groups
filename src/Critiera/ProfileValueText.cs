@@ -20,6 +20,8 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Criteria
             SelectionFactoryType = typeof(OperatorsSelectionFactory<ProfileValueText>),
             LabelTranslationKey = "/visitorgroups/profile/criteria/operator"
         )]
+
+        [Required]
         public string Operator { get; set; }
 
         [CriterionPropertyEditor(
