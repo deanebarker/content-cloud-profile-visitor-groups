@@ -8,7 +8,9 @@ In general terms:
 
 In more technical terms:
 
->You want to take this external data and bind it to the user's session in some queryable form. You don't want the overhead of querying the external data source every time, because the data doesn't change that often, so you just need it cached and available. Then you want a set of Visitor Group Criteria by which you can query this session store and show or hide content based on the results. This store of information can be anything, so you need the criteria to be generic and universally applicable.
+>You want to take this external data and bind it to the user's session in some queryable form. You don't want the overhead of querying the external data source every time, because the data doesn't change that often, so you just need it cached and available.
+>
+>Then you want a set of Visitor Group Criteria by which you can query this session store and show or hide content based on the results. This store of information can be anything, so you need the criteria to be generic and universally applicable.
 
 (Note: if you're using the [Optimizely Data Platform](https://www.optimizely.com/data-platform/), you don't need this. Our built-in integration handles all this already.)
 
