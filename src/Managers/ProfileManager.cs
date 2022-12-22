@@ -1,26 +1,20 @@
-﻿using EPiServer.ServiceLocation;
-using Microsoft.Extensions.Caching.Memory;
-using Alloy.Liquid.Jackson_Hewitt;
-using Microsoft.Extensions.Options;
-using DeaneBarker.Optimizely.ProfileVisitorGroups;
+﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.IdProviders;
 using DeaneBarker.Optimizely.ProfileVisitorGroups.Stores;
+using Microsoft.Extensions.Options;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 {
     public class ProfileManager : IProfileManager
     {
-        private string cookieName;
-        private string httpContextKey = "__TEMPPROFILEID";
-        private CookieOptions cookieOptions; 
         public static List<Action<Profile>> ProfileLoaders { get; set; } = new();
         private readonly IProfileStore _store;
+        private readonly IIdProvider _idProvider;
 
-        public ProfileManager(IProfileStore store, IOptions<ProfileManagerOptions> options)
+        public ProfileManager(IProfileStore store, IIdProvider idProvider, IOptions<ProfileManagerOptions> options)
         {
             _store = store;
+            _idProvider = idProvider;
             ProfileLoaders.AddRange(options.Value.ProfileLoaders);
-            cookieName = options.Value.CookieName ?? "_profileManagerCookie";
-            cookieOptions = options.Value.CookieOptions ?? new CookieOptions();
         }
 
         public Profile Load(string id)
@@ -30,9 +24,11 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 
         public virtual Profile LoadForCurrentUser()
         {
-            var id = GetIdFromCookie();
+            var id = _idProvider.GetId();
+            if (id == null) return null;
 
             var profile = Load(id);
+
             if (profile == null)
             {
                 // Create a new profile
@@ -74,7 +70,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
         public string GetString(string key)
         {
             var profile = LoadForCurrentUser();
-            return profile.Get(key);
+            return profile?.Get(key);
         }
 
 
@@ -119,46 +115,46 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 
         // Returns one of...
         // 1. The value of the identifier cookie that was passed IN
-        // 2. The value of a new identifier cookie that will be passed BACK
-        private string GetIdFromCookie()
-        {
-            var httpContextAccessor = ServiceLocator.Current.GetInstance<IHttpContextAccessor>();
+        //// 2. The value of a new identifier cookie that will be passed BACK
+        //private string GetIdFromCookie()
+        //{
+        //    var httpContextAccessor = ServiceLocator.Current.GetInstance<IHttpContextAccessor>();
 
-            string id;
+        //    string id;
 
-            var cookie = httpContextAccessor.HttpContext.Request.Cookies[cookieName];
-            if (cookie != null)
-            {
-                // Get the ID that was passed IN
-                id = cookie.ToString();
-            }
-            else
-            {
-                // There's no cookie, so...
+        //    var cookie = httpContextAccessor.HttpContext.Request.Cookies[cookieName];
+        //    if (cookie != null)
+        //    {
+        //        // Get the ID that was passed IN
+        //        id = cookie.ToString();
+        //    }
+        //    else
+        //    {
+        //        // There's no cookie, so...
 
-                // Check to see if it's stored as an HttpContext item
-                // The problem is that during the first request, this id is not in a cookie, so it's not globally available
-                // So for the first request, we have to force it to be globally available. After this, we send it back as a cookie, and we're good
-                if (httpContextAccessor.HttpContext.Items[httpContextKey] != null)
-                {
-                    id = httpContextAccessor.HttpContext.Items[httpContextKey].ToString();
-                }
-                else
-                {
-                    // Create a new ID and passed it BACK
-                    id = Guid.NewGuid().ToString();
-                    httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id, cookieOptions);
-                    // Note: I haven't manually done anything with cookies in YEARS
-                    // Is this persistent? I think so? If not, you'll need to add some CookieOptions settings to make it persistent
+        //        // Check to see if it's stored as an HttpContext item
+        //        // The problem is that during the first request, this id is not in a cookie, so it's not globally available
+        //        // So for the first request, we have to force it to be globally available. After this, we send it back as a cookie, and we're good
+        //        if (httpContextAccessor.HttpContext.Items[httpContextKey] != null)
+        //        {
+        //            id = httpContextAccessor.HttpContext.Items[httpContextKey].ToString();
+        //        }
+        //        else
+        //        {
+        //            // Create a new ID and passed it BACK
+        //            id = Guid.NewGuid().ToString();
+        //            httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id, cookieOptions);
+        //            // Note: I haven't manually done anything with cookies in YEARS
+        //            // Is this persistent? I think so? If not, you'll need to add some CookieOptions settings to make it persistent
 
-                    // Put it in the context so it's globally available for the entirety of the request
-                    httpContextAccessor.HttpContext.Items[httpContextKey] = id;
-                }
+        //            // Put it in the context so it's globally available for the entirety of the request
+        //            httpContextAccessor.HttpContext.Items[httpContextKey] = id;
+        //        }
 
-            }
+        //    }
 
-            return id;
-        }
+        //    return id;
+        //}
 
 #if DEBUG
                 

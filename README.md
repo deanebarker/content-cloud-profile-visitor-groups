@@ -33,13 +33,21 @@ This library provides five different Visitor Group criteria to query information
 The criteria and examples of a Visitor Group they might be used for.
 
 * **Text:** compare if a text profile value equals, starts with, ends with, contains, (etc.) a provided number
+
   >For "Is VIP Prospect," determine if the value for `email_address` ends with "@potential-customer.com"
+
 * **Number:** compare if a numeric profile value equals, is greater than, is less than, (etc.) a provided number
+
   >For "Has Children," determine if the value for `number_of_children` is greater than 0.
+
 * **Date:** compare if a dated numeric profile value equals, is greater than, is less than, (etc.) a provider date 
+
   >For "Needs to Approve New TOC," determine if the value for `date_account_created` is prior to January 1, 2022.
+
 * **Relative Date:** compare if a specified part of the timespan between a dated profile value and _now_ equals, is greater than, is less than, (etc.) a provided number
+
   >For "Is Adult," determine if the number of years between now and the value for `date_of_birth` is greater than 18.
+
 * **Exists:** determine if a key does or does not exist (regardless of value)
   >For "Account is Suspended," determine if a key for `account_suspended_date` exists.
 
@@ -130,8 +138,6 @@ Or:
 ```
 services.AddProfileManager(options => {
     options.ProfileLoaders.Add(ExternalData.SomeMethodThatPopulatesTheProfile);
-    options.CookieName = "theDesiredNameOfTheCookie";
-    options.CookieOptions = new CookieOptions() { Expires = DateTime.Now.AddYears(1) };
 });
 ```
 
@@ -162,6 +168,12 @@ There are two injected services. They're established in `AddProfileManager`, but
 services.AddSingleton<IProfileManager, ProfileManager>();
 services.AddSingleton<IProfileStore, ProfileStore>();
 ```
+
+## ID Providers
+
+The default way of providing an ID to locate the profile data is to store it in a cookie, using the `ICookieIdProvider` service.
+
+This is injectable. One other is provided: `IUsernameIdProvider` which will use the ID of the logged in user. (If no user is logged in, no profile will be found and all criteria will return `false`.)
 
 
 ## Testing Controller

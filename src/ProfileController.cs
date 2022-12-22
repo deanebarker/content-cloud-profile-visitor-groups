@@ -47,11 +47,12 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
         [Route("show")]
         public string Show()
         {
-            var profile = _profileManager.LoadForCurrentUser();
             Response.ContentType = "text/plain";
 
+            var profile = _profileManager.LoadForCurrentUser();
+
             var sb = new StringBuilder();
-            sb.Append(profile.ToString());
+            sb.AppendLine(profile?.ToString() ?? "No profile found");
             sb.AppendLine();
 
             var vgs = ServiceLocator.Current.GetInstance<IVisitorGroupRepository>();
@@ -90,8 +91,6 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
             var sb = new StringBuilder();
             foreach (var profile in ((ProfileManager)_profileManager).GetAll())
             {
-                sb.AppendLine(profile.Id);
-                sb.AppendLine(new string('-', profile.Id.Length));
                 sb.Append(profile);
                 sb.AppendLine();
             }

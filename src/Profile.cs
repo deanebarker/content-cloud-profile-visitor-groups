@@ -10,7 +10,9 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"{this.Count()} keys()");
+            sb.AppendLine(Id);
+            sb.AppendLine($"{this.Count()} key(s)");
+            sb.AppendLine("---------");
             foreach (var value in this)
             {
                 sb.AppendLine($"{value.Key}: \"{value.Value}\"");
