@@ -30,6 +30,8 @@ When the session ends, the profile will eventually be discarded from cache. It w
 ### The Visitor Group Criteria
 This library provides five different Visitor Group criteria to query information in this profile. For each, a key can be specified, and the value for this key will be retrieved from the profile to provide the basis for comparison.
 
+The criteria and examples of a Visitor Group they might be used for.
+
 * **Text:** compare if a text profile value equals, starts with, ends with, contains, (etc.) a provided number
   >For "Is VIP Prospect," determine if the value for `email_address` ends with "@potential-customer.com"
 * **Number:** compare if a numeric profile value equals, is greater than, is less than, (etc.) a provided number
