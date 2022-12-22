@@ -5,21 +5,25 @@ This library allows a key/value store to be instantiated and bound to a cookie s
 This library provides five different Visitor Group criteria to query information in this profile. For each, a key can be specified, and the value for this key will be retrieved from the profile to provide the basis for comparison.
 
 * **Text:** compare if a text profile value equals, starts with, ends with, contains, (etc.) a provided number
-  >Determine if the value for "email_address" ends with "@potential-customer.com"
+  >Determine if the value for `email_address` ends with "@potential-customer.com"
 * **Number:** compare if a numeric profile value equals, is greater than, is less than, (etc.) a provided number
-  >Determine if the value for "number_of_children" is greater than 0.
+  >Determine if the value for `number_of_children` is greater than 0.
 * **Date:** compare if a dated numeric profile value equals, is greater than, is less than, (etc.) a provider date 
-  >Determine if the value for "date_accounted_created" is prior to January 1, 2022.
+  >Determine if the value for `date_accounted_created` is prior to January 1, 2022.
 * **Relative Date:** compare if a specified part of the timespan between a dated profile value and now equals, is greater than, is less than, (etc.) a provided number
-  >Determine if the number of years between now and the value for "date_of_birth" is greater than 18.
+  >Determine if the number of years between now and the value for `date_of_birth` is greater than 18.
 * **Exists:** determine if a key does or does not exist (regardless of value)
-  >Determine if a key for "account_suspended_date" exists.
+  >Determine if a key for `account_suspended_date` exists.
 
 These criteria can be combined to define granular Visitor Groups based on profile information.
 
-This profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- on first request, then just held in a session-like state for the duration of the visitor's session, and used as a data source for Visitor Group logic.
+For all criteria, the "Profile Key" value can be comma-delimited. If so, keys will be checked in order, and the first one to return a value will be used.
 
-The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`.
+>Specifying a key of `dob, date_of_birth` will look for a key named `dob` and use it if it exists, if not it will look for a key called `date_of_birth`.
+
+These profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- on first request, then just held in a session-like state for the duration of the visitor's session, and used as a data source for Visitor Group logic so the external data source doens't have to be repeatedly queried.
+
+The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`. (But I don't recommend it. There was better ways of doing this -- this is why CDPs exist.)
 
 ## Adding Data to a Profile
 
