@@ -3,7 +3,7 @@ using EPiServer.ServiceLocation;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
 {
-    public static class ExternalData
+    public static class SampleLoaders
     {
         // Some external system
         public static void PopulateProfileFromExternalSource_One(this Profile profile)

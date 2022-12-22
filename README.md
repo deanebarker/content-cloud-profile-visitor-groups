@@ -153,7 +153,7 @@ profile["first_name"] = "Deane"; // This will add the "first_name" key or update
 profile.Add("first_name", "Deane"); // If the "first_name" key was added by another loader, you'll get an error
 ```
 
-The `ExternalData` class in the source provides some examples.
+The `SampleLoaders` class in the source provides some examples.
 
 
 There are two injected services. They're established in `AddProfileManager`, but can be replaced anytime after that:
