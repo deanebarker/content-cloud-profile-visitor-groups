@@ -55,15 +55,16 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
             sb.AppendLine();
 
             var vgs = ServiceLocator.Current.GetInstance<IVisitorGroupRepository>();
-            foreach(var vg in vgs.List())
+            foreach(var vg in vgs.List()) 
             {
                 sb.AppendLine($"\"{vg.Name}\"");
                 sb.AppendLine(new string('-', vg.Name.Length + 2));
-                foreach(var criterion in vg.Criteria)
+                foreach(var criterion in vg.Criteria.Where(c => c.TypeName.StartsWith("DeaneBarker.Optimizely.ProfileVisitorGroups.Criteria."))) // We only care about the five criterion in this library
                 {
                     // This is awful code.
                     // Get vaccinated just because you looked at it.
                     // (There has to be a better way of doing this...)
+
                     var executable = Activator.CreateInstance(Type.GetType(criterion.TypeName));
                     executable.GetType().GetMethod("Initialize").Invoke(executable, new object[] { criterion });
                     var result = executable.GetType().GetMethod("IsMatch").Invoke(executable, new object[] { (IPrincipal)null, (HttpContext)null });

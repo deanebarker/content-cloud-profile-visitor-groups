@@ -17,6 +17,8 @@ This library provides five different Visitor Group criteria to query information
 
 These criteria can be combined to define granular Visitor Groups based on profile information.
 
+This profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- on first request, then just held in a session-like state for the duration of the visitor's session, and used as a data source for Visitor Group logic.
+
 ## Adding Data to a Profile
 
 The profile can be access via `ProfileManager`, which can be used to inject data. The `Profile` object is simply a `ConcurrentDictionary`.
