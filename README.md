@@ -1,5 +1,19 @@
 # Content Cloud Profile Visitor Groups
 
+## Core Use Case
+
+In general terms:
+
+>You have some external store of profile information, be it an actual CDP or something else. This is fairly static, non-volatile, demographic information that doesn't change based on immediate visitor behavior (examples: first name, email address, date-of-birth, etc.). You want a way to bind this data to the user's session, and use it to personalize content.
+
+In Optimizely Content Cloud terms:
+
+>You want a set of Visitor Group Criteria by which you can query a store of information about _this specific user_ and show or hide content based on the results. This store of information can be anything, so you need the criteria to be generic and universally applicable. And you don't want the overhead of querying the external data source every time, because the data doesn't change that often, so you just need it cached and available.
+
+(Note: if you're using the Optimizely Data Platform, you don't need this. Our built-in integration handles all this already.)
+
+## Details
+
 This library allows a key/value store to be instantiated and bound to a cookie send with the user's request. This key-value store can be injected with data representing a user's demographic/profile information.
 
 This library provides five different Visitor Group criteria to query information in this profile. For each, a key can be specified, and the value for this key will be retrieved from the profile to provide the basis for comparison.
