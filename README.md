@@ -23,22 +23,29 @@ For all criteria, the "Profile Key" value can be comma-delimited. If so, keys wi
 
 These profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- on first request, then just held in a session-like state for the duration of the visitor's session, and used as a data source for Visitor Group logic so the external data source doens't have to be repeatedly queried.
 
-The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`. (But I don't recommend it. There was better ways of doing this -- this is why CDPs exist.)
+The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`. (But I don't recommend it. There are better ways of doing this -- this is why CDPs exist.)
 
 ## Adding Data to a Profile
 
-The profile can be access via `ProfileManager`, which can be used to inject data. The `Profile` object is simply a `ConcurrentDictionary`.
+The profile can be accessed via `ProfileManager`.
 
 ```
 var profileManager = ServiceLocation.Current.GetInstance<IProfileManager>();
 var profile = profileManager.LoadForCurrentUser();
-profile["some_key"] = "some value";
-profilerManager.Save(profile)
 ```
 
 If a profile doesn't exist for this visitor, it will be automatically created and bound to their request with a persistent cookie.
 
-Alternately, `ProfileLoaders` can be specified which will automatically load profiles with data upon creation.
+You can add data to a profile manually (the `Profile` object is simply a dictionary).
+
+```
+profile["some_key"] = "some value";
+profilerManager.Save(profile)
+```
+
+This should be thread-safe at the defaults. The `Profile` object is a `ConcurrentDictionary` and the default `IProfileStore` uses `MemoryCache` which is also thread-safe.
+
+Alternately, `ProfileLoaders` can be specified in configuration which will automatically load profiles with data upon creation.
 
 ```
 ProfileManager.ProfileLoader(GetExternalData);

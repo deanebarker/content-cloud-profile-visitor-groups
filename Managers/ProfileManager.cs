@@ -147,6 +147,8 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
                     // Create a new ID and passed it BACK
                     id = Guid.NewGuid().ToString();
                     httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id);
+                    // Note: I haven't manually done anything with cookies in YEARS
+                    // Is this persistent? I think so? If not, you'll need to add some CookieOptions settings to make it persistent
 
                     // Put it in the context so it's globally available for the entirety of the request
                     httpContextAccessor.HttpContext.Items[httpContextKey] = id;
