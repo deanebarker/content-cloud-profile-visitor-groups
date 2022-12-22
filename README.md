@@ -93,12 +93,14 @@ This should be thread-safe at the defaults. The `Profile` object is a `Concurren
 The ability to update the profile can be handy for a slow-running external store that you don't want to wait around for. You can _start_ the population process during profile instantiation, and when it finishes, it can update the profile. (Of course, this means you likely won't get to personalize the first request, but that's a tradeoff you might need to make, depending on how slow your data is.)
 
 ```
-public static void LoadFromSlowDataSource(this Profile profile)
+public static void LoadFromSlowDataSource(Profile profile)
 {
   // Start the process and return to the calling code...
   Task.Run(() =>
   {
       // Lots of time passes...
+      
+      // ..finally
       var data = new Dictionary<string, string>
       {
         ["dogs_name"] = "Lavallette"
