@@ -1,5 +1,4 @@
 ﻿using EPiServer.Personalization.VisitorGroups;
-using JacksonHewitt;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Alloy.Liquid.Jackson_Hewitt.Critiera

@@ -1,7 +1,7 @@
 ﻿using Alloy.Liquid.Jackson_Hewitt.Critiera;
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Managers;
 using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
-using JacksonHewitt;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
 

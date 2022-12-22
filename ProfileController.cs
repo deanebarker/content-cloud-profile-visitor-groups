@@ -5,9 +5,9 @@
 
 #if DEBUG
 
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Managers;
 using EPiServer.Personalization.VisitorGroups;
 using EPiServer.ServiceLocation;
-using JacksonHewitt;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 using System.Text;

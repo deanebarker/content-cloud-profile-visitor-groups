@@ -3,12 +3,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Alloy.Liquid.Jackson_Hewitt;
 using Microsoft.Extensions.Options;
 using DeaneBarker.Optimizely.ProfileVisitorGroups;
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Stores;
 
-namespace JacksonHewitt
+namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 {
     public class ProfileManager : IProfileManager
     {
         private string cookieName;
+        private string httpContextKey = "__TEMPPROFILEID";
 
         public static List<Action<Profile>> ProfileLoaders { get; set; } = new();
         private readonly IProfileStore _store;
@@ -119,11 +121,11 @@ namespace JacksonHewitt
         // 2. The value of a new identifier cookie that will be passed BACK
         private string GetIdFromCookie()
         {
-            var httpContext = ServiceLocator.Current.GetInstance<IHttpContextAccessor>();
+            var httpContextAccessor = ServiceLocator.Current.GetInstance<IHttpContextAccessor>();
 
             string id;
 
-            var cookie = httpContext.HttpContext.Request.Cookies[cookieName];
+            var cookie = httpContextAccessor.HttpContext.Request.Cookies[cookieName];
             if (cookie != null)
             {
                 // Get the ID that was passed IN
@@ -131,9 +133,24 @@ namespace JacksonHewitt
             }
             else
             {
-                // Create a new ID and passed it BACK
-                id = Guid.NewGuid().ToString();
-                httpContext.HttpContext.Response.Cookies.Append(cookieName, id);
+                // There's no cookie, so...
+
+                // Check to see if it's stored as an HttpContext item
+                // The problem is that during the first request, this id is not in a cookie, so it's not globally available
+                // So for the first request, we have to force it to be globally available. After this, we send it back as a cookie, and we're good
+                if (httpContextAccessor.HttpContext.Items[httpContextKey] != null)
+                {
+                    id = httpContextAccessor.HttpContext.Items[httpContextKey].ToString();
+                }
+                else
+                {
+                    // Create a new ID and passed it BACK
+                    id = Guid.NewGuid().ToString();
+                    httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id);
+
+                    // Put it in the context so it's globally available for the entirety of the request
+                    httpContextAccessor.HttpContext.Items[httpContextKey] = id;
+                }
 
             }
 

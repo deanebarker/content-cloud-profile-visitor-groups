@@ -1,8 +1,4 @@
-﻿using DeaneBarker.Optimizely.ProfileVisitorGroups;
-using JacksonHewitt;
-using Microsoft.Extensions.Caching.Memory;
-
-namespace Alloy.Liquid.Jackson_Hewitt
+﻿namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
 {
     public interface IProfileStore
     {

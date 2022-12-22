@@ -1,6 +1,4 @@
-﻿using JacksonHewitt;
-
-namespace DeaneBarker.Optimizely.ProfileVisitorGroups
+﻿namespace DeaneBarker.Optimizely.ProfileVisitorGroups
 {
     public class ProfileManagerOptions
     {

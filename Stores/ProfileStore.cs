@@ -1,9 +1,6 @@
-﻿using DeaneBarker.Optimizely.ProfileVisitorGroups;
-using JacksonHewitt;
-using Microsoft.EntityFrameworkCore.Design.Internal;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace Alloy.Liquid.Jackson_Hewitt
+namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
 {
     public class ProfileStore : IProfileStore
     {

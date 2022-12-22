@@ -1,6 +1,5 @@
-﻿using EPiServer.ServiceLocation;
-using JacksonHewitt;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.Managers;
+using EPiServer.ServiceLocation;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
 {

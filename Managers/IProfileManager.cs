@@ -1,4 +1,4 @@
-﻿namespace DeaneBarker.Optimizely.ProfileVisitorGroups
+﻿namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 {
     public interface IProfileManager
     {

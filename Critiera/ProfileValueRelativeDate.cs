@@ -1,14 +1,10 @@
 ﻿using Alloy.Liquid.Jackson_Hewitt.Critiera;
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Managers;
 using EPiServer.Personalization.VisitorGroups;
-using EPiServer.Web.Mvc.VisitorGroups;
+using EPiServer.ServiceLocation;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
-using System.Linq;
-using EPiServer.ServiceLocation;
-using JacksonHewitt;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Criteria
 {

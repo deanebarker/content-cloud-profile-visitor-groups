@@ -1,7 +1,6 @@
-﻿using Alloy.Liquid.Jackson_Hewitt;
+﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.Managers;
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Stores;
 using EPiServer.ServiceLocation;
-using JacksonHewitt;
-using Microsoft.Extensions.Options;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups
 {
