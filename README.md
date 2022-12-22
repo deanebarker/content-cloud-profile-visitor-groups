@@ -55,7 +55,7 @@ The criteria and examples of a Visitor Group they might be used for.
 
 These criteria can be combined to define granular Visitor Groups based on profile information.
 
-![](vg-criteria.jpg)
+![](doc/images/vg-criteria.jpg)
 
 For all criteria, the "Profile Key" value can be comma-delimited. If so, keys will be checked in order, and the first one to return a value will be used. This is handy if a key name changes, or if the data is non-consistent.
 
@@ -183,9 +183,11 @@ This is injectable. One other is provided: `IUsernameIdProvider` which will use 
 
 `ProfileController` can be used to test the profiles.
 
-* **/profile/show** will show the profile for the current user and how that profile is performing against all profile criteria in all visitor groups.
+* **/profile/show** will show the profile for the current user and how that profile is performing against all profile criteria in all visitor groups (see image below)
 * **/profile/set** will allow manual setting of profile data via querystring: `/profile/set?key=first_name&value=deane`. Not supplying a value will cause that key to be deleted.
 * **/profile/all** will show all profiles current in the system
+
+![](doc/images/profile-show.jpg)
 
 
 ## Status
