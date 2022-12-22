@@ -4,7 +4,7 @@
 
 In general terms:
 
->You have some external store of profile information, be it an actual CDP or something else. This is fairly static, non-volatile, demographic information that doesn't change based on immediate visitor behavior (examples: first name, email address, date-of-birth, etc.). You want to use this data to personalize content.
+>You have some external store of profile information about your users -- an actual CDP or something else (a database table of employee information, for example). This is fairly static, non-volatile, demographic information that doesn't change based on immediate visitor behavior (examples: first name, email address, date-of-birth, etc.). You want to use this data to personalize content.
 
 In more technical terms:
 
@@ -17,7 +17,7 @@ In more technical terms:
 ## Details
 
 ### The Profile Data Store
-This library allows a key/value store to be instantiated and bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
+This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
 
 The key/value store is a `Dictionary<string,string>`. All data is stored as a string, and converted for evaluation.
 
@@ -25,7 +25,7 @@ Henceforth, this data will be called "the profile."
 
 These profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- _on first request_, then just held in a session-like state for the duration of the visitor's session and used as a data source for Visitor Group logic so the external data source doesn't have to be repeatedly queried.
 
-The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`. (But I don't recommend it. There are better ways of doing this -- this is why CDPs exist, remember.)
+The default implementation just stores the profile data in cache. If you want to change this to persist profile data, you can inject a new service for `IProfileStore`. (But I don't recommend it. There are better ways of doing this -- this is why CDPs exist, remember.)
 
 When the session ends, the profile will eventually be discarded from cache. It will be re-populated from the external store if a new session is created with the same cookie value.
 
