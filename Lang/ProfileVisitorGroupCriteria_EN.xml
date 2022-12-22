@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="English" id="en-us">
+    <visitorgroups>
+      <profile>
+        <criteria>
+          <key>Key from Profile</key>
+          <operator>Comparison Type</operator>
+          <value>Value to Compare</value>
+          <text>
+            <casing>Case Sensitive</casing>
+          </text>
+          <relativedate>
+            <datepart>Date Part</datepart>
+          </relativedate>
+        </criteria>
+      </profile>
+    </visitorgroups>
+  </language>
+</languages>
