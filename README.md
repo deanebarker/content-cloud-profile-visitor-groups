@@ -164,11 +164,12 @@ profile.Add("first_name", "Deane"); // If the "first_name" key was added by anot
 The `SampleLoaders` class in the source provides some examples.
 
 
-There are two injected services. They're established in `AddProfileManager`, but can be replaced anytime after that:
+There are three injected services. They're established in `StartupExtensions.AddProfileManager`, but can be replaced anytime after that:
 
 ```
 services.AddSingleton<IProfileManager, ProfileManager>();
 services.AddSingleton<IProfileStore, ProfileStore>();
+services.AddSingleton<IIDProvider, CookieIdProvider>();
 ```
 
 ## ID Providers
