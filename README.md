@@ -1,4 +1,4 @@
-﻿# Content Cloud Profile Visitor Groups
+# Content Cloud Profile Visitor Groups
 
 This library allows a key/value store to be instantiated and bound to a cookie send with the user's request. This key-value store can be injected with data representing a user's demographic/profile information.
 
@@ -18,6 +18,8 @@ This library provides five different Visitor Group criteria to query information
 These criteria can be combined to define granular Visitor Groups based on profile information.
 
 This profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- on first request, then just held in a session-like state for the duration of the visitor's session, and used as a data source for Visitor Group logic.
+
+The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`.
 
 ## Adding Data to a Profile
 
@@ -82,3 +84,8 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 * **/profile/show** will show the profile for the current user and how that profile is performing against all profile criteria in all visitor groups.
 * **/profile/set** will allow manual setting of profile data via querystring: `/profile/set?key=first_name&value=deane`. Not supplying a value will cause that key to be deleted.
 * **/profile/all** will show all profiles current in the system
+
+
+## Status
+
+Unofficial, unsupported, and largely untested. It was provided to a customer as a POC.
