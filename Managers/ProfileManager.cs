@@ -11,7 +11,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
     {
         private string cookieName;
         private string httpContextKey = "__TEMPPROFILEID";
-
+        private CookieOptions cookieOptions; 
         public static List<Action<Profile>> ProfileLoaders { get; set; } = new();
         private readonly IProfileStore _store;
 
@@ -20,6 +20,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
             _store = store;
             ProfileLoaders.AddRange(options.Value.ProfileLoaders);
             cookieName = options.Value.CookieName ?? "_profileManagerCookie";
+            cookieOptions = options.Value.CookieOptions ?? new CookieOptions();
         }
 
         public Profile Load(string id)
@@ -146,7 +147,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
                 {
                     // Create a new ID and passed it BACK
                     id = Guid.NewGuid().ToString();
-                    httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id);
+                    httpContextAccessor.HttpContext.Response.Cookies.Append(cookieName, id, cookieOptions);
                     // Note: I haven't manually done anything with cookies in YEARS
                     // Is this persistent? I think so? If not, you'll need to add some CookieOptions settings to make it persistent
 

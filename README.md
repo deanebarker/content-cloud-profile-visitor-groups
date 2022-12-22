@@ -105,7 +105,10 @@ public static void LoadFromSlowDataSource(this Profile profile)
       };
 
       var profileManager = ServiceLocator.Current.GetInstance<IProfileManager>();
-      profileManager.Update(profile.Id, data);          
+
+      // You pass in a dictionary of the data to be added
+      // You don't pass the incoming profile, because it might have changed in the meantime
+      profileManager.Update(profile.Id, data); 
   });
 }
 ```
@@ -126,6 +129,7 @@ Or:
 services.AddProfileManager(options => {
     options.ProfileLoaders.Add(ExternalData.SomeMethodThatPopulatesTheProfile);
     options.CookieName = "theDesiredNameOfTheCookie";
+    options.CookieOptions = new CookieOptions() { Expires = DateTime.Now.AddYears(1) };
 });
 ```
 
