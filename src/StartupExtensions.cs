@@ -50,5 +50,11 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups
             services.AddTransient<IProfile, JsonProfile>();
             return services;
         }
+
+        public static IServiceCollection AddXmlProfile(this IServiceCollection services)
+        {
+            services.AddTransient<IProfile, XmlProfile>();
+            return services;
+        }
     }
 }

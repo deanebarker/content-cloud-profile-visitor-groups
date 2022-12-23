@@ -41,12 +41,20 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
 
         public static void PopulateProfileFromFakeWebServiceCall(IProfile profile)
         {
-            // Pretend this is a web service call to some external system
-            // It would pass the value of Profile.Id as a parameter
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"App_Data/Profiles/{profile.Id}.json");
-            var json = File.ReadAllText(path);
+            // What profile type are we used?
+            if (ServiceLocator.Current.GetInstance<IProfile>() is JsonProfile)
+            {
+                ((JsonProfile)profile).LoadJson(readFile("json"));
+            }
+            else
+            {
+                ((XmlProfile)profile).LoadXml(readFile("xml"));
+            }
 
-            ((JsonProfile)profile).LoadJson(json);
+            string readFile(string extension)
+            {
+                return File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"App_Data/Profiles/{profile.Id}.{extension}"));
+            }
         }
     }
 }
