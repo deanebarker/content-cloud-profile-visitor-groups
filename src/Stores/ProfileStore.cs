@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.Profiles;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
 {
@@ -7,14 +8,15 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
         // This is thread-safe; no need to lock
         private static readonly MemoryCache cache = new(new MemoryCacheOptions());
 
-        public Profile Get(string id)
+        public IProfile Get(string id)
         {
-            return cache.Get(id) as Profile;
+            return cache.Get(id) as DictionaryProfile;
         }
 
-        public void Put(Profile profile)
+        public void Put(IProfile profile)
         {
             cache.Set(profile.Id, profile);
         }
+
     }
 }
