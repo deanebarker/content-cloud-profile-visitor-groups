@@ -16,6 +16,24 @@ In more technical terms:
 
 ## Details
 
+Here's the problem we're trying to solve:
+
+![](doc/images/arch-problem.jpg)
+
+Two problems:
+
+1. Latency of the repeated calls to the external data source (when the data most likely hasn't changed
+2. The lack of Visitor Group Criteria to query the external data source
+
+![](doc/images/arch-solution.jpg)
+
+The solutions for our two problems:
+
+1. A one time call to the external data source, then coercion of that date into a known structure
+2. A set of Visitor Group Criteria to query that known structure
+
+And here's how w'
+
 ### The Profile Data Store
 This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
 
