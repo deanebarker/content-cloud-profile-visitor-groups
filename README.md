@@ -16,23 +16,22 @@ In more technical terms:
 
 ## Details
 
-Here's the problem we're trying to solve:
-
-![](doc/images/arch-problem.jpg)
-
-Two problems:
+Here are the two problems we're trying to solve:
 
 1. Latency of the repeated calls to the external data source (when the data most likely hasn't changed
 2. The lack of Visitor Group Criteria to query the external data source
 
-![](doc/images/arch-solution.jpg)
+![](doc/images/arch-problem.jpg)
 
 The solutions for our two problems:
 
 1. A one time call to the external data source, then coercion of that date into a known structure
 2. A set of Visitor Group Criteria to query that known structure
 
+![](doc/images/arch-solution.jpg)
+
 ### The Profile Data Store
+
 This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
 
 The key/value store is a `Dictionary<string,string>`. All data is stored as a string, and converted for evaluation.
@@ -46,6 +45,7 @@ The default implementation just stores the profile data in cache. If you want to
 When the session ends, the profile will eventually be discarded from cache. It will be re-populated from the external store if a new session is created with the same cookie value.
 
 ### The Visitor Group Criteria
+
 This library provides five different Visitor Group criteria to query information in this profile. For each, a key can be specified, and the value for this key will be retrieved from the profile to provide the basis for comparison.
 
 The criteria and examples of a Visitor Group they might be used for.
