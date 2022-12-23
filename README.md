@@ -32,8 +32,6 @@ The solutions for our two problems:
 1. A one time call to the external data source, then coercion of that date into a known structure
 2. A set of Visitor Group Criteria to query that known structure
 
-And here's how w'
-
 ### The Profile Data Store
 This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
 
