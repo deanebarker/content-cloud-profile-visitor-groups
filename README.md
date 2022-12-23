@@ -18,7 +18,7 @@ In more technical terms:
 
 Here are the two problems we're trying to solve:
 
-1. Latency of the repeated calls to the external data source (when the data most likely hasn't changed
+1. Latency of the repeated calls to the external data source (when the data most likely hasn't changed)
 2. The lack of Visitor Group Criteria to query the external data source
 
 ![](doc/images/arch-problem.jpg)
@@ -34,7 +34,7 @@ The solutions for our two problems:
 
 This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
 
-The key/value store is a `Dictionary<string,string>`. All data is stored as a string, and converted for evaluation.
+The default key/value store is a `Dictionary<string,string>` (you can change this with your own service implementation -- XML and JSON samples are provided). All data is stored as a string, and converted for evaluation.
 
 Henceforth, this data will be called "the profile."
 
