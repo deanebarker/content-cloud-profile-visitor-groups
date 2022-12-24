@@ -192,9 +192,12 @@ The `SampleLoaders` class in the source provides some examples.
 There are three injected services. They're established in `StartupExtensions.AddProfileManager`, but can be replaced anytime after that:
 
 ```
+// These are singleton servers
 services.AddSingleton<IProfileManager, ProfileManager>();
 services.AddSingleton<IProfileStore, ProfileStore>();
 services.AddSingleton<IIDProvider, CookieIdProvider>();
+
+// This is the class that's used for every profile
 services.AddSingleton<IProfile, Profile>();
 ```
 
