@@ -198,7 +198,7 @@ services.AddSingleton<IProfileStore, ProfileStore>();
 services.AddSingleton<IIDProvider, CookieIdProvider>();
 
 // This is the class that's used for every profile
-services.AddSingleton<IProfile, Profile>();
+services.AddTransient<IProfile, DictionaryProfile>();
 ```
 
 ## ID Providers
