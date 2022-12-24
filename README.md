@@ -154,8 +154,17 @@ services.AddProfileManager();
 Or:
 
 ```
-services.AddProfileManager(options => {
-    options.ProfileLoaders.Add(ExternalData.SomeMethodThatPopulatesTheProfile);
+services.AddProfileVisitorGroups(options =>
+{
+  options.ProfileLoaders.Add((profile) =>
+  {
+    // (Clearly, you would do something a little more interesting for production...)
+    profile["first_name"] = "Deane";
+    profile["last_name"] = "Barker";
+    profile["dob"] = "1971-09-03";
+    profile["state"] = "SD";
+    profile["country"] = "USA";
+  });
 });
 ```
 
@@ -167,7 +176,7 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 Finally, you need to define a method to load the profile. If you don't, everything will appear to work fine, but the profile will never populate any data.
 
-To do this, create an `Action<Profile>` and add it to the `ProfileLoaders` property on `ProfileManager` or in the options, as shown above. Inside the method, simply add key/value data to the dictionary. Remember, this is simply a dictionary of strings, so the normal key constraints apply.
+To do this, create an `Action<Profile>` and add it to the `ProfileLoaders` property on `ProfileManager` or in the options, as shown above. Inside the method, simply add key/value data to the dictionary. Remember, the default implementation is simply a dictionary of strings, so the normal key constraints apply.
   
 ```
 // This is safe....
@@ -186,6 +195,7 @@ There are three injected services. They're established in `StartupExtensions.Add
 services.AddSingleton<IProfileManager, ProfileManager>();
 services.AddSingleton<IProfileStore, ProfileStore>();
 services.AddSingleton<IIDProvider, CookieIdProvider>();
+services.AddSingleton<IProfile, Profile>();
 ```
 
 ## ID Providers
