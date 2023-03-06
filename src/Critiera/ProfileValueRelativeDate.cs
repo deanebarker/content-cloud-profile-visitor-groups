@@ -101,7 +101,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Criteria
             var options = new List<SelectListItem>();
             foreach(var value in Enum.GetValues(typeof(DatePart)))
             {
-                options.Add(new SelectListItem(value.ToString(), value.ToString()));
+                options.Add(new SelectListItem(value.ToString(), ((int)value).ToString()));
             }
             return options;
         }
