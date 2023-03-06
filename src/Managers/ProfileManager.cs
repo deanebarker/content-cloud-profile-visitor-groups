@@ -1,12 +1,14 @@
 ﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.IdProviders;
+using DeaneBarker.Optimizely.ProfileVisitorGroups.Profiles;
 using DeaneBarker.Optimizely.ProfileVisitorGroups.Stores;
+using EPiServer.ServiceLocation;
 using Microsoft.Extensions.Options;
 
 namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
 {
     public class ProfileManager : IProfileManager
     {
-        public static List<Action<Profile>> ProfileLoaders { get; set; } = new();
+        public static List<Action<IProfile>> ProfileLoaders { get; set; } = new();
         private readonly IProfileStore _store;
         private readonly IIdProvider _idProvider;
 
@@ -17,12 +19,12 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
             ProfileLoaders.AddRange(options.Value.ProfileLoaders);
         }
 
-        public Profile Load(string id)
+        public IProfile Load(string id)
         {
             return _store.Get(id);
         }
 
-        public virtual Profile LoadForCurrentUser()
+        public virtual IProfile LoadForCurrentUser()
         {
             var id = _idProvider.GetId();
             if (id == null) return null;
@@ -33,10 +35,8 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
             {
                 // Create a new profile
                 // This constructor will populate from the CDP
-                profile = new Profile()
-                {
-                    Id = id
-                };
+                profile = ServiceLocator.Current.GetInstance<IProfile>();
+                profile.Id = id;
 
                 foreach (var loader in ProfileLoaders)
                 {
@@ -107,7 +107,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
         }
 
 
-        public void Save(Profile profile)
+        public void Save(IProfile profile)
         {
             _store.Put(profile);
         }
@@ -161,9 +161,9 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Managers
         // Won't need for prodction
         // This is just so we can list the profiles for /profile/all
         private List<string> Manifest = new(); // This exists just to keep track of the keys in the cache (we can't iterate cache keys)
-        public List<Profile> GetAll()
+        public List<DictionaryProfile> GetAll()
         {
-            return Manifest.Select(k => _store.Get(k) as Profile).ToList();
+            return Manifest.Select(k => _store.Get(k) as DictionaryProfile).ToList();
         }
 
 #endif

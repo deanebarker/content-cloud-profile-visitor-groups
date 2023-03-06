@@ -31,7 +31,7 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups.TestingCode
 
             if (value == null)
             {
-                profile.Remove(key, out string _);
+                profile.Remove(key);
             }
             else
             {

@@ -4,7 +4,7 @@
 
 In general terms:
 
->You have some external store of profile information, be it an actual CDP or something else. This is fairly static, non-volatile, demographic information that doesn't change based on immediate visitor behavior (examples: first name, email address, date-of-birth, etc.). You want to use this data to personalize content.
+>You have some external store of profile information about your users -- an actual CDP or something else (a database table of employee information, for example). This is fairly static, non-volatile, demographic information that doesn't change based on immediate visitor behavior (examples: first name, email address, date-of-birth, etc.). You want to use this data to personalize content.
 
 In more technical terms:
 
@@ -16,20 +16,36 @@ In more technical terms:
 
 ## Details
 
-### The Profile Data Store
-This library allows a key/value store to be instantiated and bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
+Here are the two problems we're trying to solve:
 
-The key/value store is a `Dictionary<string,string>`. All data is stored as a string, and converted for evaluation.
+1. Latency of the repeated calls to the external data source (when the data most likely hasn't changed)
+2. The lack of Visitor Group Criteria to query the external data source
+
+![](doc/images/arch-problem.jpg)
+
+The solutions for our two problems:
+
+1. A one time call to the external data source, then coercion of that date into a known structure
+2. A set of Visitor Group Criteria to query that known structure
+
+![](doc/images/arch-solution.jpg)
+
+### The Profile Data Store
+
+This library allows a key/value store to be instantiated and (in the default implementation) bound to a cookie sent with the user's requests. This key-value store can be populated with data representing a user's demographic/profile information. This data population can happen at instantiation (the intention of the library), or dynamically, during the session (not really intended, but available).
+
+The default key/value store is a `Dictionary<string,string>` (you can change this with your own service implementation -- XML and JSON samples are provided). All data is stored as a string, and converted for evaluation.
 
 Henceforth, this data will be called "the profile."
 
 These profiles are intended to be ephemeral. The use case is when they're populated by some external system -- like a CDP -- _on first request_, then just held in a session-like state for the duration of the visitor's session and used as a data source for Visitor Group logic so the external data source doesn't have to be repeatedly queried.
 
-The default implementation just stores the profile data in cache. If you want to change this to persist profile data, inject a new service for `IProfileStore`. (But I don't recommend it. There are better ways of doing this -- this is why CDPs exist, remember.)
+The default implementation just stores the profile data in cache. If you want to change this to persist profile data, you can inject a new service for `IProfileStore`. (But I don't recommend it. There are better ways of doing this -- this is why CDPs exist, remember.)
 
 When the session ends, the profile will eventually be discarded from cache. It will be re-populated from the external store if a new session is created with the same cookie value.
 
 ### The Visitor Group Criteria
+
 This library provides five different Visitor Group criteria to query information in this profile. For each, a key can be specified, and the value for this key will be retrieved from the profile to provide the basis for comparison.
 
 The criteria and examples of a Visitor Group they might be used for.
@@ -55,7 +71,7 @@ The criteria and examples of a Visitor Group they might be used for.
 
 These criteria can be combined to define granular Visitor Groups based on profile information.
 
-![](vg-criteria.jpg)
+![](doc/images/vg-criteria.jpg)
 
 For all criteria, the "Profile Key" value can be comma-delimited. If so, keys will be checked in order, and the first one to return a value will be used. This is handy if a key name changes, or if the data is non-consistent.
 
@@ -138,8 +154,17 @@ services.AddProfileManager();
 Or:
 
 ```
-services.AddProfileManager(options => {
-    options.ProfileLoaders.Add(ExternalData.SomeMethodThatPopulatesTheProfile);
+services.AddProfileVisitorGroups(options =>
+{
+  options.ProfileLoaders.Add((profile) =>
+  {
+    // (Clearly, you would do something a little more interesting for production...)
+    profile["first_name"] = "Deane";
+    profile["last_name"] = "Barker";
+    profile["dob"] = "1971-09-03";
+    profile["state"] = "SD";
+    profile["country"] = "USA";
+  });
 });
 ```
 
@@ -151,7 +176,7 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 Finally, you need to define a method to load the profile. If you don't, everything will appear to work fine, but the profile will never populate any data.
 
-To do this, create an `Action<Profile>` and add it to the `ProfileLoaders` property on `ProfileManager` or in the options, as shown above. Inside the method, simply add key/value data to the dictionary. Remember, this is simply a dictionary of strings, so the normal key constraints apply.
+To do this, create an `Action<Profile>` and add it to the `ProfileLoaders` property on `ProfileManager` or in the options, as shown above. Inside the method, simply add key/value data to the dictionary. Remember, the default implementation is simply a dictionary of strings, so the normal key constraints apply.
   
 ```
 // This is safe....
@@ -164,12 +189,16 @@ profile.Add("first_name", "Deane"); // If the "first_name" key was added by anot
 The `SampleLoaders` class in the source provides some examples.
 
 
-There are three injected services. They're established in `StartupExtensions.AddProfileManager`, but can be replaced anytime after that:
+There are three injected services and an injected class. They're established in `StartupExtensions.AddProfileManager`, but can be replaced anytime after that:
 
 ```
+// These are singleton services
 services.AddSingleton<IProfileManager, ProfileManager>();
 services.AddSingleton<IProfileStore, ProfileStore>();
 services.AddSingleton<IIDProvider, CookieIdProvider>();
+
+// This is the class that's used for every profile
+services.AddTransient<IProfile, DictionaryProfile>();
 ```
 
 ## ID Providers
@@ -183,9 +212,11 @@ This is injectable. One other is provided: `IUsernameIdProvider` which will use 
 
 `ProfileController` can be used to test the profiles.
 
-* **/profile/show** will show the profile for the current user and how that profile is performing against all profile criteria in all visitor groups.
+* **/profile/show** will show the profile for the current user and how that profile is performing against all profile criteria in all visitor groups (see image below)
 * **/profile/set** will allow manual setting of profile data via querystring: `/profile/set?key=first_name&value=deane`. Not supplying a value will cause that key to be deleted.
 * **/profile/all** will show all profiles current in the system
+
+![](doc/images/profile-show.jpg)
 
 
 ## Status

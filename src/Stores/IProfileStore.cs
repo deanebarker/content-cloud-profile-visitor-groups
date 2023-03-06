@@ -1,8 +1,10 @@
-﻿namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
+﻿using DeaneBarker.Optimizely.ProfileVisitorGroups.Profiles;
+
+namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Stores
 {
     public interface IProfileStore
     {
-        Profile Get(string id);
-        void Put(Profile profile);
+        IProfile Get(string id);
+        void Put(IProfile profile);
     }
 }

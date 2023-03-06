@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Text;
 
-namespace DeaneBarker.Optimizely.ProfileVisitorGroups
+namespace DeaneBarker.Optimizely.ProfileVisitorGroups.Profiles
 {
-    public class Profile : ConcurrentDictionary<string, string>
+    public class DictionaryProfile : ConcurrentDictionary<string, string>, IProfile
     {
         public string Id { get; set; } // We technically don't need this, but it felt weird not to store it
 
@@ -22,15 +22,20 @@ namespace DeaneBarker.Optimizely.ProfileVisitorGroups
 
         public string Get(string keys)
         {
-            foreach(var key in keys.Split(',').Select(s => s.Trim()))
+            foreach (var key in keys.Split(',').Select(s => s.Trim()))
             {
-                if(ContainsKey(key))
+                if (ContainsKey(key))
                 {
                     return this[key];
                 }
             }
 
             return null;
+        }
+
+        public void Remove(string key)
+        {
+            TryRemove(key, out var _);
         }
     }
 }
